@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pkl
+*.keras
+models/
+data/
+.Rproj.user/
+*.zip
+*.csv
