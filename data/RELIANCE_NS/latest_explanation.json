@@ -1,0 +1,91 @@
+{
+  "narrative": "📉 **Reliance Industries** is predicted to close at **₹1,308.35** tomorrow (-3.0%). Confidence: **86%** (High).\n\n🏛️ Market regime: **BEAR**. Direction consensus: **DOWN** (4/6 models agree). Classifier vote: 1 UP / 3 DOWN.\n\n📊 **Key driving factors**:\n  1. 🟢 High (+286.212)\n  2. 🟢 Low (+138.646)\n  3. 🟢 Close rolling mean 10 (+82.419)\n  4. 🟢 Price 2 days ago (+33.342)\n  5. 🟢 Open (+26.661)\n",
+  "shap": {
+    "top_features": [
+      {
+        "feature": "High",
+        "display_name": "High",
+        "impact": 286.212,
+        "direction": "positive"
+      },
+      {
+        "feature": "Low",
+        "display_name": "Low",
+        "impact": 138.6456,
+        "direction": "positive"
+      },
+      {
+        "feature": "close_rolling_mean_10",
+        "display_name": "close rolling mean 10",
+        "impact": 82.4193,
+        "direction": "positive"
+      },
+      {
+        "feature": "close_lag_2",
+        "display_name": "price 2 days ago",
+        "impact": 33.3415,
+        "direction": "positive"
+      },
+      {
+        "feature": "Open",
+        "display_name": "Open",
+        "impact": 26.6606,
+        "direction": "positive"
+      },
+      {
+        "feature": "close_lag_1",
+        "display_name": "yesterday's price",
+        "impact": 14.0202,
+        "direction": "positive"
+      },
+      {
+        "feature": "bb_upper",
+        "display_name": "bb upper",
+        "impact": 9.7867,
+        "direction": "positive"
+      },
+      {
+        "feature": "close_rolling_mean_5",
+        "display_name": "close rolling mean 5",
+        "impact": 9.696,
+        "direction": "positive"
+      }
+    ],
+    "model": "XGBoost SHAP"
+  },
+  "rf_importance": {
+    "return_lag_5": 0.03485145303719096,
+    "return_lag_10": 0.03444175699310767,
+    "return_lag_2": 0.03394041747703663,
+    "daily_return": 0.03357627993345935,
+    "return_lag_3": 0.03240813743564017,
+    "volume_lag_10": 0.029580989479183546,
+    "roc": 0.02932643383172503,
+    "bb_width": 0.02914337941303437,
+    "volatility_20d": 0.028891881132635796,
+    "macd_diff": 0.028411932008819595,
+    "return_lag_1": 0.028255173891854966,
+    "volume_ratio": 0.028180178657643048,
+    "volume_lag_5": 0.02788086880133078,
+    "return_lag_7": 0.02769268100297062,
+    "close_rolling_std_5": 0.027637818907793245
+  },
+  "lr_coefficients": {
+    "bb_lower": -0.4353202189542828,
+    "bb_upper": 0.3132442785731975,
+    "Low": 0.2794067340643612,
+    "close_lag_7": 0.27537307643124415,
+    "close_lag_2": -0.26680931697087334,
+    "atr": 0.25075365213903944,
+    "close_lag_1": -0.2027945374533117,
+    "High": 0.19987255204293666,
+    "macd_diff": 0.197206457660196,
+    "close_rolling_mean_5": -0.12675871654418897,
+    "momentum": -0.12494320419865627,
+    "close_rolling_std_10": -0.12142985933439168,
+    "volatility_20d": -0.11506989755862304,
+    "return_lag_10": -0.10483447959171373,
+    "close_lag_10": 0.10460016485612261
+  },
+  "timestamp": "2026-03-28T20:29:32.867601"
+}

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex-Oracle | Advanced Predictive Multi-Signal Predictor</title>
+    <meta name="description" content="Real-time stock market prediction with regime-aware explainable AI. 8 models, live updates, natural-language narratives.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ═══ TOP BAR ═══ -->
+    <header id="top-bar">       
+        <div class="top-bar-left">
+            <div class="logo">
+                <span class="logo-icon">◈</span>
+                <span class="logo-text">Apex-Oracle</span>
+            </div>
+            <div id="live-indicator" class="live-indicator offline">
+                <span class="live-dot"></span>
+                <span class="live-text">OFFLINE</span>
+            </div>
+        </div>
+        <div class="top-bar-center">
+            <select id="stock-selector" class="stock-selector">
+                <option value="RELIANCE.NS">Reliance Industries</option>
+                <option value="TCS.NS">TCS</option>
+                <option value="INFY.NS">Infosys</option>
+                <option value="HDFCBANK.NS">HDFC Bank</option>
+                <option value="ICICIBANK.NS">ICICI Bank</option>
+            </select>
+        </div>
+        <div class="top-bar-right">
+            <div id="last-updated" class="last-updated">
+                <span class="label">Last Updated</span>
+                <span class="time" id="update-time">—</span>
+            </div>
+            <button id="btn-refresh" class="btn-icon" title="Run Pipeline Now">⟳</button>
+        </div>
+    </header>
+
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <main id="dashboard">
+        <!-- ── ROW 1: Hero Prediction + Regime ── -->
+        <section class="row row-hero">
+            <div class="card card-prediction" id="card-prediction">
+                <div class="card-header">
+                    <h2 id="pred-company">Reliance Industries</h2>
+                    <span id="pred-ticker" class="ticker-badge">RELIANCE.NS</span>
+                </div>
+                <div class="prediction-body">
+                    <div class="price-block">
+                        <div class="current-price">
+                            <span class="label">Current</span>
+                            <span class="price" id="current-price">—</span>
+                        </div>
+                        <div class="arrow-block" id="direction-arrow">
+                            <span class="arrow">→</span>
+                        </div>
+                        <div class="predicted-price">
+                            <span class="label">Predicted</span>
+                            <span class="price" id="predicted-price">—</span>
+                        </div>
+                    </div>
+                    <div class="change-block">
+                        <span class="change" id="change-pct">—</span>
+                        <span class="direction-badge" id="direction-badge">—</span>
+                    </div>
+                </div>
+                <div class="confidence-block">
+                    <div class="confidence-ring-container">
+                        <svg class="confidence-ring" viewBox="0 0 120 120">
+                            <circle class="ring-bg" cx="60" cy="60" r="52" />
+                            <circle class="ring-fill" id="confidence-ring" cx="60" cy="60" r="52" />
+                        </svg>
+                        <div class="confidence-center">
+                            <span class="conf-value" id="confidence-value">—</span>
+                            <span class="conf-label">Confidence</span>
+                        </div>
+                    </div>
+                    <div class="agreement-info">
+                        <div class="agreement-row">
+                            <span class="label">Models Agree</span>
+                            <span id="models-agree">—</span>
+                        </div>
+                        <div class="agreement-row">
+                            <span class="label">Classifier Vote</span>
+                            <span id="classifier-vote">—</span>
+                        </div>
+                        <div class="agreement-row" id="conflict-row" style="display:none">
+                            <span class="conflict-badge">⚠ CONFLICT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-regime" id="card-regime">
+                <div class="card-header">
+                    <h2>Market Regime</h2>
+                </div>
+                <div class="regime-display">
+                    <div class="regime-badge" id="regime-badge">
+                        <span class="regime-icon" id="regime-icon">◎</span>
+                        <span class="regime-name" id="regime-name">—</span>
+                    </div>
+                    <div class="regime-confidence">
+                        <span class="label">Regime Confidence</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="regime-confidence-bar"></div>
+                        </div>
+                        <span id="regime-confidence-value">—</span>
+                    </div>
+                </div>
+                <div class="regime-probabilities" id="regime-probabilities">
+                    <div class="regime-prob-item bull">
+                        <span class="regime-prob-label">Bull</span>
+                        <div class="mini-bar"><div class="mini-fill" id="prob-bull"></div></div>
+                    </div>
+                    <div class="regime-prob-item bear">
+                        <span class="regime-prob-label">Bear</span>
+                        <div class="mini-bar"><div class="mini-fill" id="prob-bear"></div></div>
+                    </div>
+                    <div class="regime-prob-item sideways">
+                        <span class="regime-prob-label">Sideways</span>
+                        <div class="mini-bar"><div class="mini-fill" id="prob-sideways"></div></div>
+                    </div>
+                    <div class="regime-prob-item volatile">
+                        <span class="regime-prob-label">Volatile</span>
+                        <div class="mini-bar"><div class="mini-fill" id="prob-volatile"></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── ROW 2: Narrative ── -->
+        <section class="row">
+            <div class="card card-narrative">
+                <div class="card-header">
+                    <h2>🧠 AI Prediction Narrative</h2>
+                </div>
+                <div class="narrative-body" id="narrative-text">
+                    <p class="placeholder">Run the pipeline to generate an AI-powered prediction narrative...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── ROW 3: Price Chart ── -->
+        <section class="row">
+            <div class="card card-chart">
+                <div class="card-header">
+                    <h2>📈 Price History & Prediction</h2>
+                </div>
+                <div class="chart-container">
+                    <canvas id="price-chart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── ROW 4: Models Panel ── -->
+        <section class="row row-models">
+            <div class="card card-half">
+                <div class="card-header">
+                    <h2>📊 Regression Models (Price)</h2>
+                </div>
+                <div class="models-grid" id="regression-models">
+                    <div class="model-card" data-model="arima">
+                        <div class="model-name">ARIMA <span class="lang-tag r">R</span></div>
+                        <div class="model-prediction" id="model-arima-pred">—</div>
+                        <div class="model-weight"><span class="label">Weight:</span> <span id="model-arima-weight">—</span></div>
+                    </div>
+                    <div class="model-card" data-model="garch">
+                        <div class="model-name">GARCH <span class="lang-tag r">R</span></div>
+                        <div class="model-prediction" id="model-garch-pred">—</div>
+                        <div class="model-weight"><span class="label">Weight:</span> <span id="model-garch-weight">—</span></div>
+                    </div>
+                    <div class="model-card" data-model="lstm">
+                        <div class="model-name">LSTM <span class="lang-tag py">Py</span></div>
+                        <div class="model-prediction" id="model-lstm-pred">—</div>
+                        <div class="model-weight"><span class="label">Weight:</span> <span id="model-lstm-weight">—</span></div>
+                    </div>
+                    <div class="model-card" data-model="xgboost">
+                        <div class="model-name">XGBoost <span class="lang-tag py">Py</span></div>
+                        <div class="model-prediction" id="model-xgboost-pred">—</div>
+                        <div class="model-weight"><span class="label">Weight:</span> <span id="model-xgboost-weight">—</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-half">
+                <div class="card-header">
+                    <h2>🗳️ Classification Models (Direction)</h2>
+                </div>
+                <div class="models-grid" id="classification-models">
+                    <div class="model-card" data-model="naive_bayes">
+                        <div class="model-name">Naive Bayes</div>
+                        <div class="model-direction" id="model-nb-dir">—</div>
+                        <div class="model-prob"><span class="label">P(Up):</span> <span id="model-nb-prob">—</span></div>
+                    </div>
+                    <div class="model-card" data-model="svm">
+                        <div class="model-name">SVM</div>
+                        <div class="model-direction" id="model-svm-dir">—</div>
+                        <div class="model-prob"><span class="label">P(Up):</span> <span id="model-svm-prob">—</span></div>
+                    </div>
+                    <div class="model-card" data-model="random_forest">
+                        <div class="model-name">Random Forest</div>
+                        <div class="model-direction" id="model-rf-dir">—</div>
+                        <div class="model-prob"><span class="label">P(Up):</span> <span id="model-rf-prob">—</span></div>
+                    </div>
+                    <div class="model-card" data-model="logistic_regression">
+                        <div class="model-name">Logistic Reg.</div>
+                        <div class="model-direction" id="model-lr-dir">—</div>
+                        <div class="model-prob"><span class="label">P(Up):</span> <span id="model-lr-prob">—</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── ROW 5: Backtesting Results ── -->
+        <section class="row">
+            <div class="card card-results">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>📊 Model Backtesting Results (Historical Accuracy)</h2>
+                    <button class="btn-icon" onclick="loadResults()" title="Reload JSON" style="font-size: 0.8rem; padding: 0.2rem 0.5rem; border-radius: 4px;">⟳ Reload</button>
+                </div>
+                <div class="table-container" style="overflow-x: auto; margin-top: 1rem;">
+                    <table id="results-table" class="data-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 0.8rem; text-transform: uppercase;">
+                                <th style="padding: 0.75rem;">Stock</th>
+                                <th style="padding: 0.75rem;">Model</th>
+                                <th style="padding: 0.75rem;">MAE</th>
+                                <th style="padding: 0.75rem;">MAPE</th>
+                                <th style="padding: 0.75rem;">Accuracy (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-tbody" style="font-size: 0.9rem;">
+                            <tr><td colspan="5" class="placeholder" style="padding: 1rem;">Loading backtest results...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── ROW 6: SHAP + Sentiment ── -->
+        <section class="row row-insights">
+            <div class="card card-half">
+                <div class="card-header">
+                    <h2>🔬 Feature Impact (SHAP)</h2>
+                </div>
+                <div class="chart-container chart-small">
+                    <canvas id="shap-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="card card-half">
+                <div class="card-header">
+                    <h2>💬 Sentiment Analysis</h2>
+                </div>
+                <div class="sentiment-display">
+                    <div class="sentiment-gauge-container">
+                        <div class="sentiment-gauge" id="sentiment-gauge">
+                            <div class="gauge-fill" id="sentiment-fill"></div>
+                            <div class="gauge-label" id="sentiment-label">Neutral</div>
+                        </div>
+                        <div class="sentiment-value" id="sentiment-value">0.00</div>
+                    </div>
+                    <div class="sentiment-headlines" id="sentiment-headlines">
+                        <p class="placeholder">No headlines loaded</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── ROW 7: Alerts ── -->
+        <section class="row">
+            <div class="card card-alerts">
+                <div class="card-header">
+                    <h2>🔔 Live Alerts</h2>
+                    <span class="alert-count" id="alert-count">0</span>
+                </div>
+                <div class="alerts-feed" id="alerts-feed">
+                    <p class="placeholder">No alerts yet</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer id="footer">
+        <div class="footer-left">
+            <span>Apex-Oracle v1.0.0</span>
+            <span class="separator">|</span>
+            <span id="footer-scheduler-status">Scheduler: —</span>
+        </div>
+        <div class="footer-right">
+            <span id="footer-memory">Memory: —</span>
+            <span class="separator">|</span>
+            <span id="footer-clients">Clients: —</span>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

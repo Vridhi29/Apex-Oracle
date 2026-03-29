@@ -1,0 +1,107 @@
+{
+  "RELIANCE.NS": {
+    "XGBoost": {
+      "MAE": 130.29,
+      "MAPE": 8.91
+    },
+    "RandomForest": {
+      "Accuracy": 49.27
+    },
+    "LogisticRegression": {
+      "Accuracy": 48.9
+    },
+    "SVM": {
+      "Accuracy": 50.73
+    },
+    "NaiveBayes": {
+      "Accuracy": 50.37
+    },
+    "LSTM": {
+      "error": "X has 4 features, but MinMaxScaler is expecting 50 features as input."
+    }
+  },
+  "TCS.NS": {
+    "XGBoost": {
+      "MAE": 187.3,
+      "MAPE": 4.76
+    },
+    "RandomForest": {
+      "Accuracy": 55.13
+    },
+    "LogisticRegression": {
+      "Accuracy": 44.69
+    },
+    "SVM": {
+      "Accuracy": 45.05
+    },
+    "NaiveBayes": {
+      "Accuracy": 49.63
+    },
+    "LSTM": {
+      "error": "X has 4 features, but MinMaxScaler is expecting 50 features as input."
+    }
+  },
+  "INFY.NS": {
+    "XGBoost": {
+      "MAE": 37.47,
+      "MAPE": 2.1
+    },
+    "RandomForest": {
+      "Accuracy": 50.73
+    },
+    "LogisticRegression": {
+      "Accuracy": 53.48
+    },
+    "SVM": {
+      "Accuracy": 49.27
+    },
+    "NaiveBayes": {
+      "Accuracy": 50.73
+    },
+    "LSTM": {
+      "error": "X has 4 features, but MinMaxScaler is expecting 50 features as input."
+    }
+  },
+  "HDFCBANK.NS": {
+    "XGBoost": {
+      "MAE": 68.78,
+      "MAPE": 7.19
+    },
+    "RandomForest": {
+      "Accuracy": 50.18
+    },
+    "LogisticRegression": {
+      "Accuracy": 50.55
+    },
+    "SVM": {
+      "Accuracy": 50.18
+    },
+    "NaiveBayes": {
+      "Accuracy": 46.52
+    },
+    "LSTM": {
+      "error": "X has 4 features, but MinMaxScaler is expecting 50 features as input."
+    }
+  },
+  "ICICIBANK.NS": {
+    "XGBoost": {
+      "MAE": 285.4,
+      "MAPE": 21.52
+    },
+    "RandomForest": {
+      "Accuracy": 48.9
+    },
+    "LogisticRegression": {
+      "Accuracy": 51.47
+    },
+    "SVM": {
+      "Accuracy": 48.9
+    },
+    "NaiveBayes": {
+      "Accuracy": 51.47
+    },
+    "LSTM": {
+      "error": "X has 4 features, but MinMaxScaler is expecting 50 features as input."
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "narrative": "📈 **Tata Consultancy Services** is predicted to close at **₹2,476.49** tomorrow (+3.6%). Confidence: **95%** (High).\n\n🏛️ Market regime: **SIDEWAYS**. Direction consensus: **UP** (6/6 models agree). Classifier vote: 4 UP / 0 DOWN.\n\n📊 **Key driving factors**:\n  1. 🟢 High (+199.950)\n  2. 🟢 Low (+114.578)\n  3. 🟢 Open (+66.489)\n  4. 🟢 Yesterday's price (+36.537)\n  5. 🟢 12-day ema (+20.336)\n",
+  "shap": {
+    "top_features": [
+      {
+        "feature": "High",
+        "display_name": "High",
+        "impact": 199.9504,
+        "direction": "positive"
+      },
+      {
+        "feature": "Low",
+        "display_name": "Low",
+        "impact": 114.5776,
+        "direction": "positive"
+      },
+      {
+        "feature": "Open",
+        "display_name": "Open",
+        "impact": 66.4887,
+        "direction": "positive"
+      },
+      {
+        "feature": "close_lag_1",
+        "display_name": "yesterday's price",
+        "impact": 36.5371,
+        "direction": "positive"
+      },
+      {
+        "feature": "ema_12",
+        "display_name": "12-day EMA",
+        "impact": 20.3358,
+        "direction": "positive"
+      },
+      {
+        "feature": "bb_upper",
+        "display_name": "bb upper",
+        "impact": 15.3921,
+        "direction": "positive"
+      },
+      {
+        "feature": "close_lag_7",
+        "display_name": "close lag 7",
+        "impact": 13.9963,
+        "direction": "positive"
+      },
+      {
+        "feature": "close_lag_5",
+        "display_name": "close lag 5",
+        "impact": 11.3677,
+        "direction": "positive"
+      }
+    ],
+    "model": "XGBoost SHAP"
+  },
+  "rf_importance": {
+    "return_lag_1": 0.03848627185685084,
+    "volume_lag_7": 0.037576846337402416,
+    "close_rolling_std_5": 0.03186722108293814,
+    "volume_lag_5": 0.031194084432467406,
+    "return_lag_3": 0.029105643366735115,
+    "volatility_20d": 0.028551949221335964,
+    "return_lag_10": 0.028515129016043243,
+    "volume_lag_10": 0.028020696007011184,
+    "bb_width": 0.02718950696801254,
+    "macd_diff": 0.02710617458437534,
+    "volume_ratio": 0.02708572329780883,
+    "return_lag_5": 0.027037253674915784,
+    "roc": 0.02687991716668337,
+    "return_lag_2": 0.026753079743772095,
+    "daily_return": 0.02630118693461612
+  },
+  "lr_coefficients": {
+    "close_lag_3": 0.46092811913830184,
+    "close_lag_10": -0.4289664885792446,
+    "sma_50": 0.41733679870875207,
+    "macd_diff": 0.3350518436273626,
+    "Volume": 0.316109477275772,
+    "close_lag_1": -0.2687049040728971,
+    "volume_ratio": -0.22442131824991826,
+    "close_lag_2": 0.20386581932731565,
+    "Low": -0.1995280966893478,
+    "momentum": -0.1489734230241778,
+    "close_lag_7": 0.14403363279100223,
+    "bb_upper": -0.1234023356719704,
+    "roc": -0.11111502487843823,
+    "return_lag_10": -0.10182227928395672,
+    "return_lag_1": -0.09756025424109839
+  },
+  "timestamp": "2026-03-28T20:29:33.274846"
+}

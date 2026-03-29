@@ -1,0 +1,127 @@
+[
+  {
+    "timestamp": "2026-03-28T19:10:52.235190",
+    "results": {
+      "RELIANCE.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20
+      },
+      "TCS.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20
+      },
+      "INFY.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20
+      },
+      "HDFCBANK.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20
+      },
+      "ICICIBANK.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20
+      }
+    }
+  },
+  {
+    "timestamp": "2026-03-28T20:28:08.967909",
+    "results": {
+      "RELIANCE.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20
+      },
+      "TCS.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 0
+      },
+      "INFY.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 0
+      },
+      "HDFCBANK.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 0
+      },
+      "ICICIBANK.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20
+      }
+    }
+  },
+  {
+    "timestamp": "2026-03-28T20:29:08.166906",
+    "results": {
+      "RELIANCE.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20
+      },
+      "TCS.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 0
+      },
+      "INFY.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 0
+      },
+      "HDFCBANK.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 0
+      },
+      "ICICIBANK.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20
+      }
+    }
+  },
+  {
+    "timestamp": "2026-03-29T12:03:42.130742",
+    "results": {
+      "RELIANCE.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20,
+        "fundamentals": "ok"
+      },
+      "TCS.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20,
+        "fundamentals": "ok"
+      },
+      "INFY.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20,
+        "fundamentals": "ok"
+      },
+      "HDFCBANK.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20,
+        "fundamentals": "ok"
+      },
+      "ICICIBANK.NS": {
+        "rows": 2775,
+        "status": "ok",
+        "headlines": 20,
+        "fundamentals": "ok"
+      }
+    }
+  }
+]

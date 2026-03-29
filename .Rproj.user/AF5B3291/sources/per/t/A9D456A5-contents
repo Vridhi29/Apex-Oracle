@@ -1,0 +1,24 @@
+data <- read.csv("~/Fundamental OF Data Science/exp4_dataset.csv")
+
+head(data)
+str(data)
+campuses <- unique(data$campus)
+devices <- unique(data$device)
+
+campuses
+devices
+count_matrix <- matrix(0,
+                       nrow = length(campuses),
+                       ncol = length(devices))
+for(i in 1:length(campuses)){
+  for(j in 1:length(devices)){
+    
+    count_matrix[i,j] <- sum(
+      data$campus == campuses[i] &
+        data$device == devices[j]
+    )
+  }
+}
+
+count_matrix
+

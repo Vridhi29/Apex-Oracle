@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX-ORACLE — Model Results</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+    padding: 32px 24px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #58a6ff;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .header .sub {
+    color: #8b949e;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    margin: 0 3px;
+  }
+  .badge-blue  { background: #1f3a5f; color: #58a6ff; }
+  .badge-green { background: #1a3a2a; color: #3fb950; }
+  .badge-amber { background: #3a2a0a; color: #d29922; }
+
+  .badges { margin-top: 12px; }
+
+  /* Tab navigation */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #21262d;
+    padding-bottom: 0;
+  }
+
+  .tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    color: #8b949e;
+    font-size: 13px;
+    font-weight: 500;
+    background: transparent;
+    transition: all 0.2s;
+    position: relative;
+    bottom: -1px;
+  }
+
+  .tab:hover { color: #e6edf3; background: #161b22; }
+
+  .tab.active {
+    color: #58a6ff;
+    border-color: #30363d;
+    border-bottom-color: #0d1117;
+    background: #0d1117;
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Cards */
+  .section-title {
+    font-size: 13px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  /* Main results table */
+  .table-wrap {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead tr {
+    background: #1c2128;
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #8b949e;
+    font-weight: 600;
+    border-bottom: 1px solid #21262d;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #21262d;
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr:hover td { background: #1c2128; }
+
+  .stock-name {
+    font-weight: 600;
+    color: #e6edf3;
+    font-size: 14px;
+  }
+
+  .stock-ticker {
+    font-size: 11px;
+    color: #58a6ff;
+    margin-top: 2px;
+    font-family: monospace;
+  }
+
+  /* Accuracy bars */
+  .acc-cell { min-width: 140px; }
+
+  .acc-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .acc-bar {
+    height: 6px;
+    border-radius: 3px;
+    flex: 1;
+    background: #21262d;
+    overflow: hidden;
+  }
+
+  .acc-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1s ease;
+  }
+
+  .acc-val {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 42px;
+    text-align: right;
+  }
+
+  .good  { color: #3fb950; }
+  .mid   { color: #d29922; }
+  .low   { color: #f85149; }
+
+  .fill-good { background: linear-gradient(90deg, #1a7f37, #3fb950); }
+  .fill-mid  { background: linear-gradient(90deg, #9e6a03, #d29922); }
+  .fill-low  { background: linear-gradient(90deg, #8b1a1a, #f85149); }
+
+  /* Regime badge */
+  .regime {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .regime-bull { background: #1a3a2a; color: #3fb950; border: 1px solid #238636; }
+  .regime-bear { background: #3a1a1a; color: #f85149; border: 1px solid #6e1a1a; }
+  .regime-side { background: #1f3a5f; color: #58a6ff; border: 1px solid #1f6feb; }
+  .regime-vol  { background: #3a2a0a; color: #d29922; border: 1px solid #9e6a03; }
+
+  /* Confidence circle */
+  .conf-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    border: 3px solid;
+  }
+
+  /* Model cards */
+  .model-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .model-card {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 10px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .model-card:hover { border-color: #388bfd; }
+
+  .model-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+
+  .model-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #e6edf3;
+  }
+
+  .model-type {
+    font-size: 11px;
+    color: #8b949e;
+    margin-top: 3px;
+  }
+
+  .model-type-badge {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .type-reg { background: #1f3a5f; color: #58a6ff; }
+  .type-cls { background: #1a3a2a; color: #3fb950; }
+  .type-reg2 { background: #3a1a3a; color: #d2a8ff; }
+
+  .model-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #21262d;
+    font-size: 13px;
+  }
+
+  .model-stat:last-child { border-bottom: none; }
+  .stat-label { color: #8b949e; }
+  .stat-val { color: #e6edf3; font-weight: 500; font-family: monospace; }
+
+  /* Summary metrics */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .metric-card {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .metric-val {
+    font-size: 28px;
+    font-weight: 700;
+    color: #58a6ff;
+    margin-bottom: 4px;
+  }
+
+  .metric-label {
+    font-size: 11px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Note box */
+  .note {
+    background: #1c2128;
+    border: 1px solid #30363d;
+    border-left: 3px solid #58a6ff;
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #8b949e;
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+
+  .note strong { color: #e6edf3; }
+
+  /* Prior bar */
+  .prior-bar {
+    display: flex;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .prior-up   { background: #3fb950; }
+  .prior-down { background: #f85149; }
+
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    color: #484f58;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>◆ APEX-ORACLE</h1>
+  <div class="sub">Model Performance Report — NSE Stock Prediction System</div>
+  <div class="badges">
+    <span class="badge badge-blue">5 Stocks</span>
+    <span class="badge badge-green">8 Models</span>
+    <span class="badge badge-blue">50 Features</span>
+    <span class="badge badge-amber">2015 – Present</span>
+    <span class="badge badge-green">40 Trained Models</span>
+  </div>
+</div>
+
+<!-- Summary Metrics -->
+<div class="metrics-row">
+  <div class="metric-card">
+    <div class="metric-val">40</div>
+    <div class="metric-label">Trained Models</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-val">50</div>
+    <div class="metric-label">Features per Stock</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-val">200</div>
+    <div class="metric-label">RF Trees per Stock</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-val">60</div>
+    <div class="metric-label">LSTM Lookback Days</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-val">80/20</div>
+    <div class="metric-label">Train / Test Split</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-val">2015</div>
+    <div class="metric-label">Data Start Year</div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('overview')">Overview</div>
+  <div class="tab" onclick="switchTab('classifiers')">Classifiers</div>
+  <div class="tab" onclick="switchTab('regression')">Regression</div>
+  <div class="tab" onclick="switchTab('models')">Model Details</div>
+</div>
+
+<!-- TAB: OVERVIEW -->
+<div id="tab-overview" class="tab-content active">
+  <div class="section-title">Per-stock confidence & regime summary</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Stock</th>
+          <th>Current Regime</th>
+          <th>Regime Confidence</th>
+          <th>UP Prior (NB)</th>
+          <th>Fusion Confidence</th>
+          <th>Signal Strength</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="stock-name">TCS</div>
+            <div class="stock-ticker">TCS.NS</div>
+          </td>
+          <td><span class="regime regime-bull">BULL</span></td>
+          <td>
+            <div class="acc-bar-wrap">
+              <div class="acc-bar"><div class="acc-fill fill-good" style="width:92%"></div></div>
+              <span class="acc-val good">92%</span>
+            </div>
+          </td>
+          <td><span class="stat-val">51.8%</span></td>
+          <td>
+            <div class="acc-bar-wrap">
+              <div class="acc-bar"><div class="acc-fill fill-good" style="width:91%"></div></div>
+              <span class="acc-val good">91%</span>
+            </div>
+          </td>
+          <td><span class="badge badge-green">Strong</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="stock-name">Infosys</div>
+            <div class="stock-ticker">INFY.NS</div>
+          </td>
+          <td><span class="regime regime-bull">BULL</span></td>
+          <td>
+            <div class="acc-bar-wrap">
+              <div class="acc-bar"><div class="acc-fill fill-good" style="width:88%"></div></div>
+              <span class="acc-val good">88%</span>
+            </div>
+          </td>
+          <td><span class="stat-val">51.9%</span></td>
+          <td>
+            <div class="acc-bar-wrap">
+              <div class="acc-bar"><div class="acc-fill fill-good" style="width:87%"></div></div>
+              <span class="acc-val good">87%</span>
+            </div>
+          </td>
+          <td><span class="badge badge-green">Strong</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="stock-name">Reliance</div>
+            <div class="stock-ticker">RELIANCE.NS</div>
+          </td>
+          <td><span class="regime regime-side">SIDEWAYS</span></td>
+          <td>
+            <div class="acc-bar-wrap">
+              <div class="acc-bar"><div class="acc-fill fill-good" style="width:78%"></div></div>
+              <span class="acc-val good">78%</span>
+            </div>
+          </td>
+          <td><span class="stat-val">52.4%</span></td>
+          <td>
+            <div class="acc-bar-wrap">
+              <div class="acc-bar"><div class="acc-fill fill-mid" style="width:86%"></div></div>
+              <span class="acc-val mid">86%</span>
+            </div>
+          </td>
+          <td><span class="badge badge-blue">Moderate</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="stock-name">ICICI Bank</div>
+            <div class="stock-ticker">ICICIBANK.NS</div>
+          </td>
+          <td><span class="regime regime-bear">BEAR</span></td>
+          <td>
+            <div class="acc-bar-wrap">
+              <div class="acc-bar"><div class="acc-fill fill-mid" style="width:71%"></div></div>
+              <span class="acc-val mid">71%</span>
+            </div>
+          </td>
+          <td><span class="stat-val">49.8%</span></td>
+          <td>
+            <div class="acc-bar-wrap">
+              <div class="acc-bar"><div class="acc-fill fill-mid" style="width:64%"></div></div>
+              <span class="acc-val mid">64%</span>
+            </div>
+          </td>
+          <td><span class="badge badge-amber">Mixed</span></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="stock-name">HDFC Bank</div>
+            <div class="stock-ticker">HDFCBANK.NS</div>
+          </td>
+          <td><span class="regime regime-bear">BEAR</span></td>
+          <td>
+            <div class="acc-bar-wrap">
+              <div class="acc-bar"><div class="acc-fill fill-low" style="width:100%"></div></div>
+              <span class="acc-val low">100%</span>
+            </div>
+          </td>
+          <td><span class="stat-val">51.9%</span></td>
+          <td>
+            <div class="acc-bar-wrap">
+              <div class="acc-bar"><div class="acc-fill fill-low" style="width:43%"></div></div>
+              <span class="acc-val low">43%</span>
+            </div>
+          </td>
+          <td><span class="badge badge-amber">Conflict</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>Why does 100% regime confidence cause low fusion confidence for HDFC?</strong>
+    The HMM is 100% certain the market is in a BEAR regime. However, regression models are predicting an UP move (+1.07%). This direct contradiction between regime signal and price prediction triggers the CONFLICT flag, applying a 25% penalty to fusion confidence. The system is correctly expressing uncertainty — it cannot reconcile a BEAR regime with an UP prediction. This is a feature, not a bug.
+  </div>
+</div>
+
+<!-- TAB: CLASSIFIERS -->
+<div id="tab-classifiers" class="tab-content">
+  <div class="section-title">Classification model analysis — direction prediction (UP / DOWN)</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Stock</th>
+          <th>NB — UP Prior</th>
+          <th>LR — Max Coefficient</th>
+          <th>LR — Convergence</th>
+          <th>RF — Trees</th>
+          <th>RF — Top-5 Feature Conc.</th>
+          <th>SVM — Support Vectors</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="stock-name">Reliance</div></td>
+          <td>
+            <div>52.4% UP / 47.6% DOWN</div>
+            <div class="prior-bar">
+              <div class="prior-up" style="width:52.4%"></div>
+              <div class="prior-down" style="width:47.6%"></div>
+            </div>
+          </td>
+          <td><span class="stat-val good">0.4353</span></td>
+          <td><span class="stat-val">58 iterations</span></td>
+          <td><span class="stat-val">200</span></td>
+          <td><span class="stat-val">16.9%</span></td>
+          <td><span class="stat-val">2,093</span></td>
+        </tr>
+        <tr>
+          <td><div class="stock-name">TCS</div></td>
+          <td>
+            <div>51.8% UP / 48.2% DOWN</div>
+            <div class="prior-bar">
+              <div class="prior-up" style="width:51.8%"></div>
+              <div class="prior-down" style="width:48.2%"></div>
+            </div>
+          </td>
+          <td><span class="stat-val good">0.4609</span></td>
+          <td><span class="stat-val">47 iterations</span></td>
+          <td><span class="stat-val">200</span></td>
+          <td><span class="stat-val">16.8%</span></td>
+          <td><span class="stat-val">2,061</span></td>
+        </tr>
+        <tr>
+          <td><div class="stock-name">Infosys</div></td>
+          <td>
+            <div>51.9% UP / 48.1% DOWN</div>
+            <div class="prior-bar">
+              <div class="prior-up" style="width:51.9%"></div>
+              <div class="prior-down" style="width:48.1%"></div>
+            </div>
+          </td>
+          <td><span class="stat-val good">0.5493</span></td>
+          <td><span class="stat-val">65 iterations</span></td>
+          <td><span class="stat-val">200</span></td>
+          <td><span class="stat-val">17.0%</span></td>
+          <td><span class="stat-val">2,082</span></td>
+        </tr>
+        <tr>
+          <td><div class="stock-name">HDFC Bank</div></td>
+          <td>
+            <div>51.9% UP / 48.1% DOWN</div>
+            <div class="prior-bar">
+              <div class="prior-up" style="width:51.9%"></div>
+              <div class="prior-down" style="width:48.1%"></div>
+            </div>
+          </td>
+          <td><span class="stat-val mid">0.7090</span></td>
+          <td><span class="stat-val">75 iterations ⚠</span></td>
+          <td><span class="stat-val">200</span></td>
+          <td><span class="stat-val">17.1%</span></td>
+          <td><span class="stat-val">2,099</span></td>
+        </tr>
+        <tr>
+          <td><div class="stock-name">ICICI Bank</div></td>
+          <td>
+            <div>49.8% UP / 50.2% DOWN</div>
+            <div class="prior-bar">
+              <div class="prior-up" style="width:49.8%"></div>
+              <div class="prior-down" style="width:50.2%"></div>
+            </div>
+          </td>
+          <td><span class="stat-val good">0.5379</span></td>
+          <td><span class="stat-val">61 iterations</span></td>
+          <td><span class="stat-val">200</span></td>
+          <td><span class="stat-val">16.7%</span></td>
+          <td><span class="stat-val">2,092</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>Reading these numbers:</strong> The NB UP Prior shows how often the stock went up historically — all stocks are near 50/50, confirming balanced training data. LR Max Coefficient shows signal strength — HDFC Bank's 0.709 is highest, meaning it needed the largest weights to find a pattern (harder to classify). TCS converged fastest (47 iterations) — it has the clearest patterns. SVM support vectors count how many training points sit on the decision boundary — higher means a harder classification problem.
+  </div>
+</div>
+
+<!-- TAB: REGRESSION -->
+<div id="tab-regression" class="tab-content">
+  <div class="section-title">Regression model architecture — price prediction (₹)</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Type</th>
+          <th>Input Features</th>
+          <th>Architecture</th>
+          <th>Training Strategy</th>
+          <th>Output</th>
+          <th>Best Regime</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>LSTM</strong></td>
+          <td><span class="badge badge-blue">Deep Learning</span></td>
+          <td>50 features × 60 days</td>
+          <td>LSTM(64) → Dropout(0.2) → LSTM(32) → Dense(16) → Dense(1)</td>
+          <td>Adam optimizer, MSE loss, EarlyStopping(patience=5)</td>
+          <td>Next-day close price ₹</td>
+          <td><span class="regime regime-bull">BULL</span></td>
+        </tr>
+        <tr>
+          <td><strong>XGBoost</strong></td>
+          <td><span class="badge badge-blue">Gradient Boost</span></td>
+          <td>50 features</td>
+          <td>200 trees, max_depth=6, lr=0.05, subsample=0.8</td>
+          <td>Early stopping on test set eval</td>
+          <td>Next-day close price ₹</td>
+          <td><span class="regime regime-bear">BEAR</span></td>
+        </tr>
+        <tr>
+          <td><strong>ARIMA</strong></td>
+          <td><span class="badge badge-amber">Statistical (R)</span></td>
+          <td>Close price time series</td>
+          <td>Auto ARIMA — AIC-optimised p,d,q</td>
+          <td>auto.arima() with stepwise search</td>
+          <td>Next-day close price ₹</td>
+          <td><span class="regime regime-side">SIDEWAYS</span></td>
+        </tr>
+        <tr>
+          <td><strong>GARCH</strong></td>
+          <td><span class="badge badge-amber">Statistical (R)</span></td>
+          <td>Return series + volatility</td>
+          <td>GARCH(1,1) with normal innovations</td>
+          <td>Maximum likelihood estimation</td>
+          <td>Next-day close + volatility ₹</td>
+          <td><span class="regime regime-vol">HIGH VOL</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title" style="margin-top:24px">Regime-aware model weights (from config.py)</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Regime</th>
+          <th>ARIMA Weight</th>
+          <th>GARCH Weight</th>
+          <th>LSTM Weight</th>
+          <th>XGBoost Weight</th>
+          <th>Reasoning</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="regime regime-bull">BULL</span></td>
+          <td>25%</td>
+          <td>10%</td>
+          <td><strong class="good">35%</strong></td>
+          <td>30%</td>
+          <td>Sequential patterns dominate in trending markets</td>
+        </tr>
+        <tr>
+          <td><span class="regime regime-bear">BEAR</span></td>
+          <td>15%</td>
+          <td>25%</td>
+          <td>25%</td>
+          <td><strong class="good">35%</strong></td>
+          <td>XGBoost captures non-linear downside features</td>
+        </tr>
+        <tr>
+          <td><span class="regime regime-side">SIDEWAYS</span></td>
+          <td><strong class="good">40%</strong></td>
+          <td>15%</td>
+          <td>15%</td>
+          <td>30%</td>
+          <td>Mean reversion — ARIMA most reliable in range-bound</td>
+        </tr>
+        <tr>
+          <td><span class="regime regime-vol">HIGH VOL</span></td>
+          <td>15%</td>
+          <td><strong class="good">40%</strong></td>
+          <td>20%</td>
+          <td>25%</td>
+          <td>GARCH explicitly models volatility clustering</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TAB: MODEL DETAILS -->
+<div id="tab-models" class="tab-content">
+  <div class="section-title">Individual model specifications</div>
+  <div class="model-grid">
+
+    <div class="model-card">
+      <div class="model-card-header">
+        <div>
+          <div class="model-name">LSTM</div>
+          <div class="model-type">Long Short-Term Memory</div>
+        </div>
+        <span class="model-type-badge type-reg">Regression</span>
+      </div>
+      <div class="model-stat"><span class="stat-label">Architecture</span><span class="stat-val">64 → 32 → 16 → 1</span></div>
+      <div class="model-stat"><span class="stat-label">Lookback window</span><span class="stat-val">60 trading days</span></div>
+      <div class="model-stat"><span class="stat-label">Input features</span><span class="stat-val">50 per timestep</span></div>
+      <div class="model-stat"><span class="stat-label">Dropout</span><span class="stat-val">0.2 (both layers)</span></div>
+      <div class="model-stat"><span class="stat-label">Optimizer</span><span class="stat-val">Adam, loss=MSE</span></div>
+      <div class="model-stat"><span class="stat-label">Saved as</span><span class="stat-val">lstm_{ticker}.keras</span></div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-card-header">
+        <div>
+          <div class="model-name">XGBoost</div>
+          <div class="model-type">Extreme Gradient Boosting</div>
+        </div>
+        <span class="model-type-badge type-reg">Regression</span>
+      </div>
+      <div class="model-stat"><span class="stat-label">Estimators</span><span class="stat-val">200 trees</span></div>
+      <div class="model-stat"><span class="stat-label">Max depth</span><span class="stat-val">6</span></div>
+      <div class="model-stat"><span class="stat-label">Learning rate</span><span class="stat-val">0.05</span></div>
+      <div class="model-stat"><span class="stat-label">Subsample</span><span class="stat-val">0.8</span></div>
+      <div class="model-stat"><span class="stat-label">Col sample</span><span class="stat-val">0.8</span></div>
+      <div class="model-stat"><span class="stat-label">SHAP support</span><span class="stat-val">TreeExplainer ✓</span></div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-card-header">
+        <div>
+          <div class="model-name">Random Forest</div>
+          <div class="model-type">Ensemble Decision Trees</div>
+        </div>
+        <span class="model-type-badge type-cls">Classifier</span>
+      </div>
+      <div class="model-stat"><span class="stat-label">Trees per stock</span><span class="stat-val">200</span></div>
+      <div class="model-stat"><span class="stat-label">Max depth</span><span class="stat-val">10</span></div>
+      <div class="model-stat"><span class="stat-label">Min samples split</span><span class="stat-val">5</span></div>
+      <div class="model-stat"><span class="stat-label">Model size</span><span class="stat-val">~3,500 KB</span></div>
+      <div class="model-stat"><span class="stat-label">Feature importance</span><span class="stat-val">Gini impurity ✓</span></div>
+      <div class="model-stat"><span class="stat-label">Output</span><span class="stat-val">UP/DOWN + probability</span></div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-card-header">
+        <div>
+          <div class="model-name">SVM</div>
+          <div class="model-type">Support Vector Machine</div>
+        </div>
+        <span class="model-type-badge type-cls">Classifier</span>
+      </div>
+      <div class="model-stat"><span class="stat-label">Kernel</span><span class="stat-val">RBF</span></div>
+      <div class="model-stat"><span class="stat-label">C (regularization)</span><span class="stat-val">1.0</span></div>
+      <div class="model-stat"><span class="stat-label">Gamma</span><span class="stat-val">scale</span></div>
+      <div class="model-stat"><span class="stat-label">Avg support vectors</span><span class="stat-val">~2,085 per stock</span></div>
+      <div class="model-stat"><span class="stat-label">Probability</span><span class="stat-val">Platt scaling ✓</span></div>
+      <div class="model-stat"><span class="stat-label">Scaler</span><span class="stat-val">StandardScaler</span></div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-card-header">
+        <div>
+          <div class="model-name">Logistic Regression</div>
+          <div class="model-type">Linear Classifier</div>
+        </div>
+        <span class="model-type-badge type-cls">Classifier</span>
+      </div>
+      <div class="model-stat"><span class="stat-label">Penalty</span><span class="stat-val">L2 (Ridge)</span></div>
+      <div class="model-stat"><span class="stat-label">C</span><span class="stat-val">1.0</span></div>
+      <div class="model-stat"><span class="stat-label">Max iterations</span><span class="stat-val">1000</span></div>
+      <div class="model-stat"><span class="stat-label">HDFC convergence</span><span class="stat-val">75 iters ⚠</span></div>
+      <div class="model-stat"><span class="stat-label">TCS convergence</span><span class="stat-val">47 iters ✓</span></div>
+      <div class="model-stat"><span class="stat-label">Interpretability</span><span class="stat-val">Coefficients ✓</span></div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-card-header">
+        <div>
+          <div class="model-name">Naive Bayes</div>
+          <div class="model-type">Gaussian Probabilistic</div>
+        </div>
+        <span class="model-type-badge type-cls">Classifier</span>
+      </div>
+      <div class="model-stat"><span class="stat-label">Type</span><span class="stat-val">GaussianNB</span></div>
+      <div class="model-stat"><span class="stat-label">Var smoothing</span><span class="stat-val">1e-09</span></div>
+      <div class="model-stat"><span class="stat-label">ICICI UP prior</span><span class="stat-val">49.8% — balanced</span></div>
+      <div class="model-stat"><span class="stat-label">Reliance UP prior</span><span class="stat-val">52.4% — slight UP bias</span></div>
+      <div class="model-stat"><span class="stat-label">Speed</span><span class="stat-val">Fastest classifier</span></div>
+      <div class="model-stat"><span class="stat-label">Sentiment fit</span><span class="stat-val">Excellent ✓</span></div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-card-header">
+        <div>
+          <div class="model-name">HMM Regime Detector</div>
+          <div class="model-type">Hidden Markov Model</div>
+        </div>
+        <span class="model-type-badge type-reg2">Regime</span>
+      </div>
+      <div class="model-stat"><span class="stat-label">States</span><span class="stat-val">4 (BULL/BEAR/SIDE/VOL)</span></div>
+      <div class="model-stat"><span class="stat-label">Covariance type</span><span class="stat-val">Full</span></div>
+      <div class="model-stat"><span class="stat-label">EM iterations</span><span class="stat-val">200</span></div>
+      <div class="model-stat"><span class="stat-label">Input features</span><span class="stat-val">5 (vol, mom, vol_ratio, trend, rsi_dev)</span></div>
+      <div class="model-stat"><span class="stat-label">HDFC confidence</span><span class="stat-val">100% BEAR</span></div>
+      <div class="model-stat"><span class="stat-label">Role</span><span class="stat-val">Controls fusion weights</span></div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-card-header">
+        <div>
+          <div class="model-name">ARIMA + GARCH</div>
+          <div class="model-type">Statistical Models (R)</div>
+        </div>
+        <span class="model-type-badge type-reg">Regression</span>
+      </div>
+      <div class="model-stat"><span class="stat-label">ARIMA selection</span><span class="stat-val">Auto AIC minimisation</span></div>
+      <div class="model-stat"><span class="stat-label">GARCH type</span><span class="stat-val">GARCH(1,1)</span></div>
+      <div class="model-stat"><span class="stat-label">Language</span><span class="stat-val">R (via subprocess)</span></div>
+      <div class="model-stat"><span class="stat-label">Graceful skip</span><span class="stat-val">If R not installed ✓</span></div>
+      <div class="model-stat"><span class="stat-label">GARCH output</span><span class="stat-val">Price + volatility forecast</span></div>
+      <div class="model-stat"><span class="stat-label">Best for</span><span class="stat-val">HIGH_VOLATILITY regime</span></div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <strong>Total model storage:</strong> 40 trained model files across 5 stocks. LSTM files are ~538 KB each (neural network weights). Random Forest files are ~3,500 KB each (200 full decision trees stored). SVM files are ~860 KB each (support vectors). XGBoost ~680 KB. HMM, LR, and NB are under 5 KB each — very lightweight.
+  </div>
+</div>
+
+<div class="footer">
+  APEX-ORACLE — Adaptive Multi-Signal Fusion Engine · Academic Research Project · NSE India
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// Animate bars on load
+window.addEventListener('load', () => {
+  document.querySelectorAll('.acc-fill').forEach(el => {
+    const w = el.style.width;
+    el.style.width = '0';
+    setTimeout(() => { el.style.width = w; }, 100);
+  });
+});
+</script>
+</body>
+</html>

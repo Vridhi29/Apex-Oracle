@@ -1,0 +1,50 @@
+# =====================================================
+# Apex-Oracle: Adaptive Multi-Signal Fusion with
+# Regime-Aware Explainable Prediction
+# =====================================================
+
+# Web Framework + Real-Time
+fastapi
+uvicorn[standard]
+websockets
+python-multipart
+
+# Scheduling (automated pipeline)
+apscheduler
+
+# Data Fetching
+yfinance
+pandas
+numpy
+requests
+feedparser
+
+# Technical Analysis
+ta
+
+# ML - Core
+scikit-learn
+xgboost
+shap
+hmmlearn
+statsmodels
+
+# Deep Learning (LSTM) - CPU only
+--extra-index-url https://download.pytorch.org/whl/cpu
+tensorflow-cpu
+# NLP (Sentiment Analysis)
+transformers
+sentencepiece
+torch
+nltk
+vaderSentiment
+# Explainability
+shap
+
+# Memory Management
+psutil
+
+# Utilities
+python-dotenv
+loguru
+joblib

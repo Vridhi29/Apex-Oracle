@@ -1,0 +1,91 @@
+{
+  "narrative": "📈 **HDFC Bank** is predicted to close at **₹764.31** tomorrow (+1.1%). Confidence: **43%** (Low).\n\n🏛️ Market regime: **BEAR**. Direction consensus: **UP** (3/6 models agree). Classifier vote: 2 UP / 2 DOWN.\n\n⚠️ **CONFLICT ALERT**: Regression models and classifiers disagree on direction. Confidence has been reduced.\n\n📊 **Key driving factors**:\n  1. 🟢 High (+138.280)\n  2. 🟢 Low (+67.918)\n  3. 🟢 Open (+12.592)\n  4. 🟢 Close rolling mean 5 (+6.813)\n  5. 🔴 Daily returns (-5.617)\n",
+  "shap": {
+    "top_features": [
+      {
+        "feature": "High",
+        "display_name": "High",
+        "impact": 138.2797,
+        "direction": "positive"
+      },
+      {
+        "feature": "Low",
+        "display_name": "Low",
+        "impact": 67.9185,
+        "direction": "positive"
+      },
+      {
+        "feature": "Open",
+        "display_name": "Open",
+        "impact": 12.5917,
+        "direction": "positive"
+      },
+      {
+        "feature": "close_rolling_mean_5",
+        "display_name": "close rolling mean 5",
+        "impact": 6.8133,
+        "direction": "positive"
+      },
+      {
+        "feature": "daily_return",
+        "display_name": "daily returns",
+        "impact": -5.6172,
+        "direction": "negative"
+      },
+      {
+        "feature": "close_lag_1",
+        "display_name": "yesterday's price",
+        "impact": 2.9146,
+        "direction": "positive"
+      },
+      {
+        "feature": "close_lag_7",
+        "display_name": "close lag 7",
+        "impact": 2.439,
+        "direction": "positive"
+      },
+      {
+        "feature": "bb_upper",
+        "display_name": "bb upper",
+        "impact": 2.2215,
+        "direction": "positive"
+      }
+    ],
+    "model": "XGBoost SHAP"
+  },
+  "rf_importance": {
+    "return_lag_1": 0.038941512033738516,
+    "return_lag_5": 0.03813008154536793,
+    "volume_ratio": 0.031889174406681334,
+    "volume_lag_1": 0.03146774953397653,
+    "close_rolling_std_5": 0.030698786077348376,
+    "return_lag_7": 0.029508232545892604,
+    "volume_lag_5": 0.029181546170149147,
+    "daily_return": 0.02902357717591971,
+    "return_lag_3": 0.028517976565153667,
+    "return_lag_2": 0.027354117207979856,
+    "rsi": 0.02727919718454198,
+    "Volume": 0.02724551355010287,
+    "return_lag_10": 0.026899292557412583,
+    "volume_lag_10": 0.02646754452904225,
+    "macd_diff": 0.0255928763833196
+  },
+  "lr_coefficients": {
+    "Low": 0.7090313343632515,
+    "close_lag_5": -0.49648547110554847,
+    "Open": 0.44622396823058413,
+    "High": 0.40109528128565963,
+    "sma_50": -0.24695618032370972,
+    "close_rolling_mean_10": -0.18293393181483222,
+    "close_lag_7": -0.17346415737448767,
+    "close_lag_1": -0.1687968665340572,
+    "return_lag_1": -0.15671507100927087,
+    "return_lag_5": -0.1430227690251238,
+    "volume_sma_20": 0.13723804341986906,
+    "close_lag_3": 0.13616884181728517,
+    "close_lag_2": -0.13429459215478073,
+    "rsi": 0.13403730997853133,
+    "atr": -0.10558328083204409
+  },
+  "timestamp": "2026-03-28T20:29:34.353450"
+}

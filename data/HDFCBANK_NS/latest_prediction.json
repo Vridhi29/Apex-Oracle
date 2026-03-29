@@ -1,0 +1,80 @@
+{
+  "ticker": "HDFCBANK.NS",
+  "company": "HDFC Bank",
+  "timestamp": "2026-03-28T20:29:28.098297",
+  "prediction": {
+    "price": 764.31,
+    "current_price": 756.2,
+    "change_pct": 1.07,
+    "direction": "UP",
+    "confidence": 0.4275,
+    "confidence_label": "Low"
+  },
+  "regime": {
+    "current": "BEAR",
+    "confidence": 1.0,
+    "probabilities": {
+      "SIDEWAYS": 0.0,
+      "BEAR": 1.0,
+      "HIGH_VOLATILITY": 0.0,
+      "BULL": 0.0
+    }
+  },
+  "models": {
+    "regression": {
+      "lstm": {
+        "prediction": 776.6090960701431,
+        "current_price": 756.2000122070312,
+        "change_pct": 2.6989002292589594,
+        "direction": "UP",
+        "model": "LSTM"
+      },
+      "xgboost": {
+        "prediction": 755.5247192382812,
+        "current_price": 756.2000122070312,
+        "change_pct": -0.08930084076289585,
+        "direction": "DOWN",
+        "model": "XGBoost"
+      }
+    },
+    "classification": {
+      "naive_bayes": {
+        "direction": "DOWN",
+        "probability_up": 8.027833370810116e-11,
+        "probability_down": 0.9999999999197087,
+        "model": "Naive Bayes"
+      },
+      "svm": {
+        "direction": "UP",
+        "probability_up": 0.5233847752073643,
+        "probability_down": 0.4766152247926359,
+        "model": "SVM"
+      },
+      "random_forest": {
+        "direction": "DOWN",
+        "probability_up": 0.483695828280665,
+        "probability_down": 0.5163041717193352,
+        "model": "Random Forest"
+      },
+      "logistic_regression": {
+        "direction": "UP",
+        "probability_up": 0.5735704629160759,
+        "probability_down": 0.42642953708392406,
+        "model": "Logistic Regression"
+      }
+    },
+    "regression_weights": {
+      "arima": 0.15,
+      "garch": 0.25,
+      "lstm": 0.25,
+      "xgboost": 0.35
+    }
+  },
+  "agreement": {
+    "total_models": 6,
+    "models_agreeing": 3,
+    "cross_layer_agrees": false,
+    "conflict_flag": true,
+    "classification_vote": "2 UP / 2 DOWN"
+  }
+}
